@@ -1,4 +1,4 @@
-name: 'youtube-daily-crawler'
+name: 'YouTube Daily Crawl'
 
 on:
   schedule:
