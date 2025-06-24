@@ -74,13 +74,10 @@ def main():
     LOG_DIR = os.path.join(BASE_DIR, 'log')
     os.makedirs(LOG_DIR, exist_ok=True)
 
-    # 7일 전 날짜
-    # target_date = (datetime.now(timezone.utc).astimezone() - timedelta(days=7))
-
-    # ✅ 테스트용 (오늘 날짜 강제 설정)
+    # ✅ 오늘 날짜 기준
     target_date = datetime.now(timezone.utc).astimezone()
-
     date_str = target_date.strftime('%Y%m%d')
+
     trending_path = os.path.join(TRENDING_DIR, f'{date_str}.csv')
     output_dir = os.path.join(COMMENTS_DIR, date_str)
     os.makedirs(output_dir, exist_ok=True)
