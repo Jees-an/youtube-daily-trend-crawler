@@ -1,4 +1,4 @@
-name: YouTube Daily Crawl
+name: "YouTube Daily Crawl"
 
 on:
   schedule:
@@ -7,7 +7,6 @@ on:
 
 jobs:
   collect_trending:
-    name: Collect Trending Videos
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -22,7 +21,6 @@ jobs:
         run: python collect_trending.py
 
   collect_comments:
-    name: Collect Comments & Replies
     needs: collect_trending
     runs-on: ubuntu-latest
     steps:
