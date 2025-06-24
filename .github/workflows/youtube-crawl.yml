@@ -1,0 +1,54 @@
+name YouTube Daily Crawl
+
+on
+  schedule
+    - cron '0 12   '  # 매일 2100 KST (UTC 12시)
+  workflow_dispatch
+
+jobs
+  collect_trending
+    name 📥 Collect Trending Videos
+    runs-on ubuntu-latest
+
+    steps
+      - uses actionscheckout@v3
+
+      - name 🐍 Set up Python
+        uses actionssetup-python@v4
+        with
+          python-version '3.10'
+
+      - name 📦 Install dependencies
+        run pip install -r requirements.txt
+
+      - name 🚀 Run collect_trending.py
+        env
+          YOUTUBE_API_KEY ${{ secrets.YOUTUBE_API_KEY }}
+        run python collect_trending.py
+
+  collect_comments
+    name 💬 Collect Comments & Replies
+    runs-on ubuntu-latest
+    needs collect_trending
+
+    steps
+      - uses actionscheckout@v3
+
+      - name 🐍 Set up Python
+        uses actionssetup-python@v4
+        with
+          python-version '3.10'
+
+      - name 📦 Install dependencies
+        run pip install -r requirements.txt
+
+      - name 🚀 Run collect_comments.py
+        env
+          YOUTUBE_API_KEY ${{ secrets.YOUTUBE_API_KEY }}
+        run python collect_comments.py
+
+      - name 📁 Upload collected files
+        uses actionsupload-artifact@v3
+        with
+          name youtube-output-${{ github.run_number }}
+          path output
