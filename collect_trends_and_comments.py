@@ -74,27 +74,27 @@ def main():
     MAX_RESULTS = 50
 
     BASE_DIR = './output'
-    CSV_DIR = os.path.join(BASE_DIR, 'trending')
-    JSON_DIR = os.path.join(BASE_DIR, 'json')
-    COMMENTS_DIR = os.path.join(BASE_DIR, 'comments')
-    LOG_DIR = os.path.join(BASE_DIR, 'log')
+    now = datetime.now(timezone.utc).astimezone()
+    date_str = now.strftime('%Y%m%d')
+    hour_str = now.strftime('%H%M%S')
+    collect_time = now.isoformat()
+
+    WORK_DIR = os.path.join(BASE_DIR, date_str, hour_str)
+    CSV_DIR = os.path.join(WORK_DIR, 'trending')
+    JSON_DIR = os.path.join(WORK_DIR, 'json')
+    COMMENTS_DIR = os.path.join(WORK_DIR, 'comments')
+    LOG_DIR = os.path.join(WORK_DIR, 'log')
 
     for d in [CSV_DIR, JSON_DIR, COMMENTS_DIR, LOG_DIR]:
         os.makedirs(d, exist_ok=True)
 
-    now = datetime.now(timezone.utc).astimezone()
-    now_str = now.strftime('%Y%m%d_%H%M%S')
-    date_str = now.strftime('%Y%m%d')
-    collect_time = now.isoformat()
-
     csv_path = os.path.join(CSV_DIR, f'{date_str}.csv')
     json_backup_path = os.path.join(JSON_DIR, f'{date_str}_response.json')
     log_path = os.path.join(LOG_DIR, f'{date_str}.log')
-    comment_output_dir = os.path.join(COMMENTS_DIR, date_str)
+    comment_output_dir = COMMENTS_DIR
     os.makedirs(comment_output_dir, exist_ok=True)
 
     try:
-        # ✅ 명시적 API 키 사용
         youtube = build('youtube', 'v3', developerKey=API_KEY)
         request = youtube.videos().list(
             part='snippet,statistics',
@@ -159,7 +159,6 @@ def main():
         else:
             raise ValueError("❌ 유효한 데이터가 없음")
 
-        # ✅ 댓글 수집 시작
         total_comment_count = 0
         total_reply_count = 0
         failed = []
