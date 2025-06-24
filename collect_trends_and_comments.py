@@ -66,7 +66,10 @@ def get_comments_and_replies(youtube, video_id, max_comments=100):
     return top_comments[:max_comments], replies
 
 def main():
-    API_KEY = os.environ['YOUTUBE_API_KEY']
+    API_KEY = os.environ.get('YOUTUBE_API_KEY')
+    if not API_KEY:
+        raise ValueError("❌ 환경변수 'YOUTUBE_API_KEY'가 설정되어 있지 않습니다.")
+
     REGION = 'KR'
     MAX_RESULTS = 50
 
@@ -91,6 +94,7 @@ def main():
     os.makedirs(comment_output_dir, exist_ok=True)
 
     try:
+        # ✅ 명시적 API 키 사용
         youtube = build('youtube', 'v3', developerKey=API_KEY)
         request = youtube.videos().list(
             part='snippet,statistics',
