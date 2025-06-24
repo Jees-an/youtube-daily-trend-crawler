@@ -2,7 +2,7 @@ name: "YouTube Daily Crawl"
 
 on:
   schedule:
-    - cron: '0 12 * * *'  # 매일 21:00 KST
+    - cron: '0 12 * * *'
   workflow_dispatch:
 
 jobs:
