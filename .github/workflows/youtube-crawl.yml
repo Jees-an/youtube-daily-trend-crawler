@@ -7,22 +7,22 @@ on:
 
 jobs:
   collect_trending:
-    name: 📥 Collect Trending Videos
+    name: Collect Trending Videos
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-      - name: 📦 Install dependencies
+      - name: Install dependencies
         run: pip install -r requirements.txt
-      - name: 🚀 Run collect_trending.py
+      - name: Run collect_trending.py
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: python collect_trending.py
 
   collect_comments:
-    name: 💬 Collect Comments & Replies
+    name: Collect Comments & Replies
     needs: collect_trending
     runs-on: ubuntu-latest
     steps:
@@ -30,13 +30,13 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-      - name: 📦 Install dependencies
+      - name: Install dependencies
         run: pip install -r requirements.txt
-      - name: 🚀 Run collect_comments.py
+      - name: Run collect_comments.py
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: python collect_comments.py
-      - name: 📁 Upload results
+      - name: Upload results
         uses: actions/upload-artifact@v3
         with:
           name: youtube-output-${{ github.run_number }}
