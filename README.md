@@ -1,1 +1,1 @@
-# youtube-daily-trend-crawler
+# youtube-trend-daily-crawler
